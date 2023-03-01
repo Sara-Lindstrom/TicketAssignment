@@ -1,0 +1,65 @@
+﻿<Window x:Class="TicketAssignment.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TicketAssignment"
+        xmlns:Model="clr-namespace:TicketAssignment.Models"
+        xmlns:ViewModel="clr-namespace:TicketAssignment.MVVM.ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <!--Left Side-->
+        <Grid Grid.Column="0" Name="Root">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="All Tickets" FontSize="18" FontWeight="DemiBold" Margin="25 20 20 20"/>
+
+            <ListView Grid.Row="1" ItemsSource="{Binding TicketList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="Model:QuickViewTicket">
+                        <Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Grid.ColumnSpan="2" Text="{Binding Title}"/>
+                                <TextBlock Grid.Column="0" Text="{Binding Status}"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <TextBlock Grid.Column="0" Text="{Binding Severity}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding CreatedTime}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding TimeSpan}"/>
+                            </Grid>
+
+
+                            <Button VerticalAlignment="Bottom" Content="Add New Ticket"></Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!--Right Side-->
+        </Grid>
+        
+        
+    </Grid>
+</Window>
