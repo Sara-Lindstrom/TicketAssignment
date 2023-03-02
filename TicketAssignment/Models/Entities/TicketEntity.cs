@@ -36,7 +36,7 @@ internal class TicketEntity
     public ICollection<CommentEntity>? Comments { get; set; }
 }
 
-enum StatusEnum
+public enum StatusEnum
 {
     NotStarted,
     Started,

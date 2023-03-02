@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TicketAssignment"
         xmlns:Model="clr-namespace:TicketAssignment.Models"
         xmlns:ViewModel="clr-namespace:TicketAssignment.MVVM.ViewModels"
+        xmlns:View="clr-namespace:TicketAssignment.MVVM.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -19,15 +20,21 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Text="All Tickets" FontSize="18" FontWeight="DemiBold" Margin="25 20 20 20"/>
 
-            <ListView Grid.Row="1" ItemsSource="{Binding TicketList}">
+            <ListView Grid.Row="1" ItemsSource="{Binding TicketList}" Margin="20">
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="Model:QuickViewTicket">
-                        <Grid>
-                            <Grid>
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
@@ -35,31 +42,38 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <TextBlock Grid.ColumnSpan="2" Text="{Binding Title}"/>
-                                <TextBlock Grid.Column="0" Text="{Binding Status}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Status}"/>
                             </Grid>
 
-                            <Grid>
+                            <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                
-                                <TextBlock Grid.Column="0" Text="{Binding Severity}"/>
+
+                                <TextBlock Grid.Column="0" Text="{Binding Severity}" Margin="0 0 20 0"/>
                                 <TextBlock Grid.Column="1" Text="{Binding CreatedTime}"/>
-                                <TextBlock Grid.Column="2" Text="{Binding TimeSpan}"/>
+                                <!--<TextBlock Grid.Column="2" Text="{Binding TimeSpan}"/>-->
                             </Grid>
-
-
-                            <Button VerticalAlignment="Bottom" Content="Add New Ticket"></Button>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <!--Right Side-->
+            <Button Command="{Binding GoToAddTicketCommand}" Grid.Row="2" Content="Add New Ticket" Margin="20" Padding="5"></Button>
         </Grid>
-        
-        
+
+        <!--Right Side-->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type ViewModel:TicketSpecificViewModel}">
+                    <View:TicketSpecificView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type ViewModel:AddTicketViewModel}">
+                    <View:AddTicketView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
     </Grid>
 </Window>

@@ -1,8 +1,7 @@
 ﻿<Application x:Class="TicketAssignment.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TicketAssignment"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:TicketAssignment">
     <Application.Resources>
          
     </Application.Resources>

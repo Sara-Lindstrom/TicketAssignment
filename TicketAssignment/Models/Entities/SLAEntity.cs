@@ -18,7 +18,7 @@ internal class SLAEntity
     public ICollection<TicketEntity> Tickets { get; set; } = null!;
 }
 
-enum SeverityEnum
+public enum SeverityEnum
 {
     Minor,
     Important,

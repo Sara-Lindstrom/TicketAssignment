@@ -30,22 +30,26 @@ internal class DatabaseService
     {
         var _tickets = new ObservableCollection<QuickViewTicket>();
 
-        foreach ( var _ticket in await _context.Tickets.ToListAsync())
+        var tickets = await _context.Tickets
+            .Include(t => t.SLA)
+            .ToListAsync();
+
+        foreach (var ticket in tickets)
         {
             _tickets.Add(new QuickViewTicket
             {
-                TicketId = _ticket.Id,
-                Title= _ticket.Title,
-                Status= _ticket.Status,
-                CreatedTime = _ticket.CreatedTime,
-                Severity = _ticket.SLA.Severity,
-                TimeSpan= _ticket.SLA.TimeSpan,
+                TicketId = ticket.Id,
+                Title = ticket.Title,
+                Status = ticket.Status,
+                CreatedTime = ticket.CreatedTime,
+                Severity = ticket.SLA.Severity,
+                TimeSpan = ticket.SLA.TimeSpan,
             });
         }
 
         return _tickets;
-
     }
+
 
     //public async Task<FullTicket> GetTicketWithComments()
     //{

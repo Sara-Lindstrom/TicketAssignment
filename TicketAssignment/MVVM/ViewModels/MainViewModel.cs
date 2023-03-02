@@ -24,21 +24,6 @@ internal partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<QuickViewTicket> ticketList;
 
-    //[ObservableProperty]
-    //private string ticketTitle;
-
-    //[ObservableProperty]
-    //private StatusEnum ticketStatus;
-
-    //[ObservableProperty]
-    //private DateTime ticketCreated;
-
-    //[ObservableProperty]
-    //private DateTime dueDate;
-
-    //[ObservableProperty]
-    //private SeverityEnum severity;
-
     public MainViewModel(DatabaseService databaseService)
     {
         _databaseService = databaseService;
@@ -49,5 +34,11 @@ internal partial class MainViewModel : ObservableObject
     private async Task populateTicketList()
     {
         TicketList = await _databaseService.GetAllTicketsAsync();
+    }
+
+    [RelayCommand]
+    private void GoToAddTicket()
+    {
+        CurrentViewModel = new AddTicketViewModel();
     }
 }
