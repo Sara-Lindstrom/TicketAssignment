@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TicketAssignment.Models.Entities;
 
 namespace TicketAssignment.Models;
@@ -23,6 +24,5 @@ class FullTicket
     public TimeSpan? TimeSpan { get; set; }
 
     //Comment
-    public string? Comment { get; set; } = null!;
-    public DateTime? CommentCreatedTime { get; set; }
+    public ICollection<CommentEntity>? Comments { get; set; }
 }

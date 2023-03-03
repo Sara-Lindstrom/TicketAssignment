@@ -3,20 +3,21 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TicketAssignment.Models;
 using TicketAssignment.Models.Entities;
+using TicketAssignment.Services;
 
 namespace TicketAssignment.MVVM.ViewModels;
 
 public partial class AddTicketViewModel : ObservableObject
 {
+    private DatabaseService databaseService = new DatabaseService();
+
     [ObservableProperty]
     private string title = string.Empty;
 
     [ObservableProperty]
     private string description = string.Empty;
-
-    [ObservableProperty]
-    private StatusEnum status = StatusEnum.NotStarted;
 
     [ObservableProperty]
     private string firstName = string.Empty;
@@ -34,18 +35,46 @@ public partial class AddTicketViewModel : ObservableObject
     private SeverityEnum severity;
 
     [ObservableProperty]
-    private TimeSpan timeSpan = TimeSpan.FromHours(1);
-
-    [ObservableProperty]
     private string[] severityEnum;
 
-    [ObservableProperty]
-    private string comment = string.Empty;
+    [RelayCommand]
+    private async Task AddToDataBase()
+    {
+        if(Title != string.Empty || Description != string.Empty || FirstName != string.Empty || LastName != string.Empty || Email != string.Empty || PhoneNumber != string.Empty )
+        {
+            FullTicket _newTicket = new FullTicket{
+                Title = Title,
+                Description = Description,
+                Status= StatusEnum.NotStarted,
+                CreatedTime= DateTime.Now,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                PhoneNumber = PhoneNumber,
+                Severity = Severity,
+            };
+
+            await databaseService.AddNewTicketAsync(_newTicket);
+
+            Title = string.Empty;
+            Description = string.Empty;
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            Email = string.Empty;
+            PhoneNumber = string.Empty;
+        }
+
+    }
 
     [RelayCommand]
-    private void AddToDataBase()
+    private void Cancel()
     {
-
+        Title = string.Empty;
+        Description = string.Empty;
+        FirstName = string.Empty;
+        LastName = string.Empty;
+        Email = string.Empty;
+        PhoneNumber = string.Empty;
     }
 
     public AddTicketViewModel()

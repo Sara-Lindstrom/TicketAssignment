@@ -24,6 +24,11 @@ internal partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<QuickViewTicket> ticketList;
 
+    [ObservableProperty]
+    private QuickViewTicket selectedTicket;
+
+
+
     public MainViewModel(DatabaseService databaseService)
     {
         _databaseService = databaseService;
@@ -40,5 +45,18 @@ internal partial class MainViewModel : ObservableObject
     private void GoToAddTicket()
     {
         CurrentViewModel = new AddTicketViewModel();
+    }
+
+    [RelayCommand]
+    private void GoToTicketSpecific()
+    {
+        if(SelectedTicket!= null)
+        {
+            CurrentViewModel = new TicketSpecificViewModel(SelectedTicket.TicketId);
+        }
+        else
+        {
+            CurrentViewModel = new TicketSpecificViewModel();
+        }
     }
 }

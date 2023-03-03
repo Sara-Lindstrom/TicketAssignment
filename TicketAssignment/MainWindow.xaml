@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TicketAssignment"
         xmlns:Model="clr-namespace:TicketAssignment.Models"
         xmlns:ViewModel="clr-namespace:TicketAssignment.MVVM.ViewModels"
-        xmlns:View="clr-namespace:TicketAssignment.MVVM.Views"
+        xmlns:View="clr-namespace:TicketAssignment.MVVM.Views" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -25,7 +25,13 @@
 
             <TextBlock Grid.Row="0" Text="All Tickets" FontSize="18" FontWeight="DemiBold" Margin="25 20 20 20"/>
 
-            <ListView Grid.Row="1" ItemsSource="{Binding TicketList}" Margin="20">
+            <ListView Grid.Row="1" ItemsSource="{Binding TicketList}" SelectedItem="{Binding SelectedTicket}" Margin="20">
+                <!--NuGet: Microsoft.Xaml.Behaviors.Wpf-->
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GoToTicketSpecificCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="Model:QuickViewTicket">
                         <Grid Margin="10">

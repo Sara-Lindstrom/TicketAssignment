@@ -23,7 +23,7 @@
             <TextBox Text="{Binding Title}"/>
 
             <TextBlock Text="SLA severity:"/>
-            <ComboBox ItemsSource="{Binding SeverityEnum}"/>
+            <ComboBox ItemsSource="{Binding SeverityEnum}" SelectedItem="{Binding Severity}" SelectedIndex="0"/>
 
             <TextBlock Text="Clients First name:"/>
             <TextBox Text="{Binding FirstName}"/>
@@ -31,10 +31,15 @@
             <TextBlock Text="Clients Last name:"/>
             <TextBox Text="{Binding LastName}"/>
 
-            <TextBlock Text="Description:"/>
-            <TextBox Text="{Binding Description}" Height="100"/>
-        </StackPanel>
+            <TextBlock Text="Clients Email:"/>
+            <TextBox Text="{Binding Email}"/>
 
+            <TextBlock Text="Clients Phone Number:"/>
+            <TextBox Text="{Binding PhoneNumber}"/>
+
+            <TextBlock Text="Description:"/>
+            <TextBox Text="{Binding Description}" Height="70"/>
+        </StackPanel>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -42,8 +47,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Command="{Binding }" Grid.Column="0" Content="Add" Margin="0 0 10 0" Padding="5"></Button>
-            <Button Command="{Binding }" Grid.Column="1" Content="Cancel" Margin="10 0 0 0" Padding="5"></Button>
+            <Button Command="{Binding AddToDataBaseCommand}" Grid.Column="0" Content="Add" Margin="0 0 10 0" Padding="5"></Button>
+            <Button Command="{Binding CancelCommand}" Grid.Column="1" Content="Cancel" Margin="10 0 0 0" Padding="5"></Button>
 
         </Grid>
     </Grid>
