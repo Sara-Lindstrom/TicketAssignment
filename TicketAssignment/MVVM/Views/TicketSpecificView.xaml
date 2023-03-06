@@ -34,46 +34,46 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
-            <TextBox Text="Title: " Grid.Row="0" Grid.Column="0" Padding="5"/>
-            <TextBox Text="{Binding Title}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Padding="5"/>
 
-            <TextBox Text="Status: " Grid.Row="1" Grid.Column="0" Padding="5"/>
+            <TextBlock Text="Title: " Grid.Row="0" Grid.Column="0" Padding="5"/>
+            <TextBlock Text="{Binding Title}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Padding="5"/>
+
+            <TextBlock Text="Status: " Grid.Row="1" Grid.Column="0" Padding="5"/>
             <ComboBox ItemsSource="{Binding StatusEnum}" SelectedItem="{Binding Status}" SelectedIndex="{Binding StatusId}" Grid.Row="1" Grid.Column="1" Padding="5"/>
 
             <TextBlock Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Padding="5">
                 <Run Text="Severity: "/>
                 <Run Text="{Binding Severity}"/>
 
-                <TextBox Text="{Binding TimeSpan}" Grid.Row="1" Grid.Column="3"/>               
+                <TextBlock Text="{Binding TimeSpan}" Grid.Row="1" Grid.Column="3"/>               
             </TextBlock>
 
 
-            <TextBox Text="Client Name: " Grid.Row="2" Grid.Column="0" Padding="5"/>
-            <TextBox Text="{Binding FirstName}" Grid.Row="2" Grid.Column="1" Padding="5"/>
-            <TextBox Text="{Binding LastName}" Grid.Row="2" Grid.Column="2" Padding="5"/>
+            <TextBlock Text="Client Name: " Grid.Row="2" Grid.Column="0" Padding="5"/>
+            <TextBlock Text="{Binding FirstName}" Grid.Row="2" Grid.Column="1" Padding="5"/>
+            <TextBlock Text="{Binding LastName}" Grid.Row="2" Grid.Column="2" Padding="5"/>
 
-            <TextBox Text="Client Contact: " Grid.Row="3" Grid.Column="0" Padding="5"/>
-            <TextBox Text="{Binding Email}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Padding="5"/>
-            <TextBox Text="{Binding PhoneNumber}" Grid.Row="3" Grid.Column="3" Padding="5"/>
+            <TextBlock Text="Client Contact: " Grid.Row="3" Grid.Column="0" Padding="5"/>
+            <TextBlock Text="{Binding Email}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Padding="5"/>
+            <TextBlock Text="{Binding PhoneNumber}" Grid.Row="3" Grid.Column="3" Padding="5"/>
 
-            <TextBox Text="Description: " Grid.Row="4" Grid.Column="0" Padding="5"/>
-            <TextBox Text="{Binding Description}" Grid.Row="4" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="3" Padding="5"/>
+            <TextBlock Text="Description: " Grid.Row="4" Grid.Column="0" Padding="5"/>
+            <TextBlock Text="{Binding Description}" Grid.Row="4" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="3" Padding="5"/>
         </Grid>
 
         <StackPanel Grid.Row="2" Margin="10 0 10 20">
-            <TextBox Text="Comments: " Padding="5"/>
+            <TextBlock Text="Comments: " Padding="5"/>
             <ListView ItemsSource="{Binding Comments}" Padding="5">
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="Entity:CommentEntity">
 
                         <StackPanel>
                             <StackPanel  Orientation="Horizontal">
-                                <TextBox Text="Comment:"/>
-                                <TextBox Text="{Binding CreatedTime}"/>
+                                <TextBlock Text="Comment:"/>
+                                <TextBlock Text="{Binding CreatedTime}"/>
                             </StackPanel>
 
-                            <TextBox Text="{Binding Comment}"/>
+                            <TextBlock Text="{Binding Comment}"/>
                         </StackPanel>
 
                     </DataTemplate>

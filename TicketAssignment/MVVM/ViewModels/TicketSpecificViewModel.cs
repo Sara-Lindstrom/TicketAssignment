@@ -66,6 +66,7 @@ internal partial class TicketSpecificViewModel : ObservableObject
         {
             _ticket.Status = Status;
             await _databaseService.UpdateTicketStatusAsync(_ticket);
+
         }
     }
 

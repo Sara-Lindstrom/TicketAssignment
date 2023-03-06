@@ -58,32 +58,13 @@ internal class DatabaseService
     public async Task UpdateTicketStatusAsync(FullTicket editedTicket)
     {
         var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == editedTicket.TicketId);
-        int _id;
 
         if (ticket != null)
         {
             ticket.Status = editedTicket.Status;
 
             _context.Update(ticket);
-            _id = await _context.SaveChangesAsync();
-
-            var removeTicketFromList = _tickets.FirstOrDefault(x => x.TicketId == ticket.Id);
-            _tickets.Remove(removeTicketFromList);
-
-            var updatedTicket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == _id);
-
-            if (updatedTicket != null)
-            {
-                _tickets.Add(new QuickViewTicket
-                {
-                    TicketId = ticket.Id,
-                    Title = ticket.Title,
-                    Status = ticket.Status,
-                    CreatedTime = ticket.CreatedTime,
-                    Severity = ticket.SLA.Severity,
-                    TimeSpan = ticket.SLA.TimeSpan,
-                });
-            }
+            await _context.SaveChangesAsync();
         }
 
     }
