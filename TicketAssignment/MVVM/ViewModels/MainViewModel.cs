@@ -28,7 +28,6 @@ internal partial class MainViewModel : ObservableObject
     private QuickViewTicket selectedTicket;
 
 
-
     public MainViewModel(DatabaseService databaseService)
     {
         _databaseService = databaseService;
@@ -36,7 +35,7 @@ internal partial class MainViewModel : ObservableObject
         Task.Run(async () => await populateTicketList());
     }
 
-    private async Task populateTicketList()
+    public async Task populateTicketList()
     {
         TicketList = await _databaseService.GetAllTicketsAsync();
     }

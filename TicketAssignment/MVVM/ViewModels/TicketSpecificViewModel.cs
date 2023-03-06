@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,9 @@ namespace TicketAssignment.MVVM.ViewModels;
 
 internal partial class TicketSpecificViewModel : ObservableObject
 {
-	DatabaseService databaseService = new DatabaseService();
+	DatabaseService _databaseService = new DatabaseService();
+
+    private FullTicket _ticket;
 
 	[ObservableProperty]
 	private string title = string.Empty;
@@ -22,6 +25,12 @@ internal partial class TicketSpecificViewModel : ObservableObject
 
     [ObservableProperty]
     private StatusEnum status;
+
+    [ObservableProperty]
+    private int statusId;
+
+    [ObservableProperty]
+    private string[] statusEnum;
 
     [ObservableProperty]
     private DateTime createdTime;
@@ -39,16 +48,26 @@ internal partial class TicketSpecificViewModel : ObservableObject
     private string phoneNumber = string.Empty;
 
     [ObservableProperty]
-    private SeverityEnum severity;
+    private string severity = string.Empty;
 
-    [ObservableProperty]
-    private string[] severityEnum;
+    //[ObservableProperty]
+    //private string[] severityEnum;
 
     [ObservableProperty]
     private TimeSpan? timeSpan;
 
     [ObservableProperty]
     private ICollection<CommentEntity>? comments;
+
+    [RelayCommand]
+    private async Task SaveTicketAltercations()
+    {
+        if(_ticket.Status != Status)
+        {
+            _ticket.Status = Status;
+            await _databaseService.UpdateTicketStatusAsync(_ticket);
+        }
+    }
 
     public TicketSpecificViewModel()
 	{
@@ -57,9 +76,24 @@ internal partial class TicketSpecificViewModel : ObservableObject
 
 	public TicketSpecificViewModel(int ticketId)
 	{
-        severityEnum = Enum.GetNames(typeof(SeverityEnum));
+        //severityEnum = Enum.GetNames(typeof(SeverityEnum));
+        statusEnum = Enum.GetNames(typeof(StatusEnum));
 
-        var SelectedTicket = Task.Run(async () => await databaseService.GetTicketWithComments(ticketId));
+        var SelectedTicket = Task.Run(async () => await _databaseService.GetTicketWithComments(ticketId));
+
+        _ticket = new FullTicket
+        {
+            TicketId = ticketId,
+            Title = SelectedTicket.Result.Title,
+            Description = SelectedTicket.Result.Description,
+            Status = SelectedTicket.Result.Status,
+            CreatedTime = SelectedTicket.Result.CreatedTime,
+            FirstName = SelectedTicket.Result.FirstName,
+            LastName = SelectedTicket.Result.LastName,
+            Email = SelectedTicket.Result.Email,
+            PhoneNumber = SelectedTicket.Result.PhoneNumber,
+            Severity = SelectedTicket.Result.Severity
+        };
 
         title = SelectedTicket.Result.Title;
         description = SelectedTicket.Result.Description;
@@ -69,7 +103,7 @@ internal partial class TicketSpecificViewModel : ObservableObject
         lastName = SelectedTicket.Result.LastName;
         email = SelectedTicket.Result.Email;
         phoneNumber = SelectedTicket.Result.PhoneNumber;
-        severity = SelectedTicket.Result.Severity;
+        severity = SelectedTicket.Result.Severity.ToString();
 
         if(SelectedTicket.Result.TimeSpan != null)
         {
@@ -79,6 +113,11 @@ internal partial class TicketSpecificViewModel : ObservableObject
         if(SelectedTicket.Result.Comments.Count != 0)
         {
             comments = SelectedTicket.Result.Comments;
-        }		
+        }
+
+        if (Enum.TryParse(Status.ToString(), out StatusEnum parsedValue))
+        {
+            statusId = (int)parsedValue;
+        }
     }
 }

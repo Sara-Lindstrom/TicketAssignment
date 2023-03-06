@@ -8,12 +8,14 @@ using System.Windows.Documents;
 using TicketAssignment.Contexts;
 using TicketAssignment.Models;
 using TicketAssignment.Models.Entities;
+using TicketAssignment.MVVM.ModelView;
 
 namespace TicketAssignment.Services;
 
 internal class DatabaseService
 {
     private DataContext _context = new DataContext();
+    private ObservableCollection<QuickViewTicket> _tickets = new ObservableCollection<QuickViewTicket>();
 
     public async Task AddNewTicketAsync(FullTicket _fullTicket)
     {
@@ -53,8 +55,36 @@ internal class DatabaseService
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateTicketStatusAsync()
+    public async Task UpdateTicketStatusAsync(FullTicket editedTicket)
     {
+        var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == editedTicket.TicketId);
+        int _id;
+
+        if (ticket != null)
+        {
+            ticket.Status = editedTicket.Status;
+
+            _context.Update(ticket);
+            _id = await _context.SaveChangesAsync();
+
+            var removeTicketFromList = _tickets.FirstOrDefault(x => x.TicketId == ticket.Id);
+            _tickets.Remove(removeTicketFromList);
+
+            var updatedTicket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == _id);
+
+            if (updatedTicket != null)
+            {
+                _tickets.Add(new QuickViewTicket
+                {
+                    TicketId = ticket.Id,
+                    Title = ticket.Title,
+                    Status = ticket.Status,
+                    CreatedTime = ticket.CreatedTime,
+                    Severity = ticket.SLA.Severity,
+                    TimeSpan = ticket.SLA.TimeSpan,
+                });
+            }
+        }
 
     }
 
@@ -65,8 +95,6 @@ internal class DatabaseService
 
     public async Task<ObservableCollection<QuickViewTicket>> GetAllTicketsAsync()
     {
-        var _tickets = new ObservableCollection<QuickViewTicket>();
-
         var tickets = await _context.Tickets
             .Include(t => t.SLA)
             .ToListAsync();
@@ -99,6 +127,7 @@ internal class DatabaseService
         {
             TicketId = _ticket.Id,
             Title = _ticket.Title,
+            Description= _ticket.Description,
             Status = _ticket.Status,
             CreatedTime = _ticket.CreatedTime,
 
