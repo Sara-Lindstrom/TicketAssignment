@@ -8,7 +8,7 @@ namespace TicketAssignment.Models.Entities;
 
 [Index(nameof(Email), IsUnique = true)]
 
-internal class ClientEntity
+public class ClientEntity
 {
     [Key]
     public int Id { get; set; }

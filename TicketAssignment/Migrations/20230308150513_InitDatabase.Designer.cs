@@ -12,7 +12,7 @@ using TicketAssignment.Contexts;
 namespace TicketAssignment.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230228151122_InitDatabase")]
+    [Migration("20230308150513_InitDatabase")]
     partial class InitDatabase
     {
         /// <inheritdoc />
@@ -44,6 +44,10 @@ namespace TicketAssignment.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("char(13)");
 
                     b.HasKey("Id");
 
@@ -89,12 +93,26 @@ namespace TicketAssignment.Migrations
                     b.Property<int>("Severity")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("TimeSpan")
-                        .HasColumnType("time");
-
                     b.HasKey("Id");
 
                     b.ToTable("SLAs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Severity = 0
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Severity = 1
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Severity = 2
+                        });
                 });
 
             modelBuilder.Entity("TicketAssignment.Models.Entities.TicketEntity", b =>

@@ -7,6 +7,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using TicketAssignment.Models;
 using TicketAssignment.Models.Entities;
 using TicketAssignment.MVVM.ViewModels;
@@ -16,28 +19,42 @@ namespace TicketAssignment.MVVM.ModelView;
 
 internal partial class MainViewModel : ObservableObject
 {
-    private DatabaseService _databaseService;
+    [ObservableProperty]
+    private bool seeResolvedTickets = false;
 
     [ObservableProperty]
     private ObservableObject currentViewModel;
 
     [ObservableProperty]
-    private ObservableCollection<QuickViewTicket> ticketList;
+    private ObservableCollection<QuickViewTicket> ticketList = new ObservableCollection<QuickViewTicket>();
 
     [ObservableProperty]
-    private QuickViewTicket selectedTicket;
+    private QuickViewTicket selectedTicket = new QuickViewTicket();
 
 
-    public MainViewModel(DatabaseService databaseService)
+    public MainViewModel()
     {
-        _databaseService = databaseService;
         currentViewModel = new TicketSpecificViewModel();
         Task.Run(async () => await populateTicketList());
     }
 
     public async Task populateTicketList()
     {
-        TicketList = await _databaseService.GetAllTicketsAsync();
+        TicketList = await DatabaseService.GetAllTicketsAsync(seeResolvedTickets);
+    }
+
+    [RelayCommand]
+    public async Task YesChecked()
+    {
+        SeeResolvedTickets = true;
+        ticketList = await DatabaseService.GetAllTicketsAsync(SeeResolvedTickets);
+    }
+
+    [RelayCommand]
+    public async Task NoChecked()
+    {
+        SeeResolvedTickets = false;
+        ticketList = await DatabaseService.GetAllTicketsAsync(SeeResolvedTickets);
     }
 
     [RelayCommand]

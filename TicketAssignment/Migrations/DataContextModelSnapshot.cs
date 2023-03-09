@@ -90,12 +90,26 @@ namespace TicketAssignment.Migrations
                     b.Property<int>("Severity")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan?>("TimeSpan")
-                        .HasColumnType("time");
-
                     b.HasKey("Id");
 
                     b.ToTable("SLAs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            Severity = 0
+                        },
+                        new
+                        {
+                            Id = -2,
+                            Severity = 1
+                        },
+                        new
+                        {
+                            Id = -3,
+                            Severity = 2
+                        });
                 });
 
             modelBuilder.Entity("TicketAssignment.Models.Entities.TicketEntity", b =>

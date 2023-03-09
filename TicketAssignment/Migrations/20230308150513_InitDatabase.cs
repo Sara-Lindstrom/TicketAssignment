@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TicketAssignment.Migrations
 {
     /// <inheritdoc />
@@ -19,7 +21,8 @@ namespace TicketAssignment.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Email = table.Column<string>(type: "varchar(320)", nullable: false)
+                    Email = table.Column<string>(type: "varchar(320)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "char(13)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,8 +35,7 @@ namespace TicketAssignment.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Severity = table.Column<int>(type: "int", nullable: false),
-                    TimeSpan = table.Column<TimeSpan>(type: "time", nullable: true)
+                    Severity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,6 +91,16 @@ namespace TicketAssignment.Migrations
                         principalTable: "Tickets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "SLAs",
+                columns: new[] { "Id", "Severity" },
+                values: new object[,]
+                {
+                    { -3, 2 },
+                    { -2, 1 },
+                    { -1, 0 }
                 });
 
             migrationBuilder.CreateIndex(

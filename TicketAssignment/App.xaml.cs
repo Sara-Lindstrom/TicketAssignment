@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TicketAssignment.MVVM.ModelView;
-using TicketAssignment.Services;
 
 namespace TicketAssignment
 {
@@ -15,12 +14,11 @@ namespace TicketAssignment
     /// </summary>
     public partial class App : Application
     {
-        DatabaseService databaseService = new DatabaseService();
         protected override void OnStartup(StartupEventArgs e)
         {
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel(databaseService)
+                DataContext = new MainViewModel()
             };
 
             MainWindow.Show();

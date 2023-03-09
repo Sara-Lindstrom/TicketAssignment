@@ -1,8 +1,10 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using TicketAssignment.Contexts;
@@ -12,20 +14,24 @@ using TicketAssignment.MVVM.ModelView;
 
 namespace TicketAssignment.Services;
 
-internal class DatabaseService
+public static class DatabaseService
 {
-    private DataContext _context = new DataContext();
-    private ObservableCollection<QuickViewTicket> _tickets = new ObservableCollection<QuickViewTicket>();
+    private static DataContext _context = new DataContext();
+    private static TicketService ticketService = new TicketService();
+    private static ObservableCollection<QuickViewTicket> _tickets = new ObservableCollection<QuickViewTicket>();
+    private static bool _showResolvedTickets = false;
 
-    public async Task AddNewTicketAsync(FullTicket _fullTicket)
+    public static async Task AddNewTicketAsync(FullTicket _fullTicket)
     {
+        string formatPhoneNumber = ticketService.FormatPhoneNumber(_fullTicket.PhoneNumber);
+
         // Client
         ClientEntity _client = new ClientEntity
         {
             FirstName = _fullTicket.FirstName,
             LastName = _fullTicket.LastName,
             Email = _fullTicket.Email,
-            PhoneNumber = _fullTicket.PhoneNumber,
+            PhoneNumber = formatPhoneNumber,
         };
 
         var _clientFromDatabase = await _context.Clients.FirstOrDefaultAsync(x => x.Email== _fullTicket.Email);
@@ -33,8 +39,8 @@ internal class DatabaseService
         if (_clientFromDatabase == null)
         {
             _context.Add(_client);
-            var id = await _context.SaveChangesAsync();
-            _clientFromDatabase = await _context.Clients.FirstOrDefaultAsync(x => x.Id == id);
+            await _context.SaveChangesAsync();
+            _clientFromDatabase = await _context.Clients.FirstOrDefaultAsync(x => x.Email == _client.Email);
         }
 
         var _SLA = await _context.SLAs.FirstOrDefaultAsync(x => x.Severity== _fullTicket.Severity);
@@ -53,9 +59,11 @@ internal class DatabaseService
 
         _context.Add(_ticket);
         await _context.SaveChangesAsync();
+        _tickets.Clear();
+        await GetAllTicketsAsync(_showResolvedTickets);
     }
 
-    public async Task UpdateTicketStatusAsync(FullTicket editedTicket)
+    public static async Task UpdateTicketStatusAsync(FullTicket editedTicket)
     {
         var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == editedTicket.TicketId);
 
@@ -65,23 +73,46 @@ internal class DatabaseService
 
             _context.Update(ticket);
             await _context.SaveChangesAsync();
+
+            _tickets.Clear();
+            await GetAllTicketsAsync(_showResolvedTickets);
         }
 
     }
 
-    public async Task AddNewCommentAsync()
+    public static async Task AddNewCommentAsync(CommentEntity newComment)
     {
+        _context.Add(newComment);
+        await _context.SaveChangesAsync();
 
+        _tickets.Clear();
+        await GetAllTicketsAsync(_showResolvedTickets);
     }
 
-    public async Task<ObservableCollection<QuickViewTicket>> GetAllTicketsAsync()
+    public static async Task<ObservableCollection<QuickViewTicket>> GetAllTicketsAsync( bool showResolvedTickets)
     {
-        var tickets = await _context.Tickets
-            .Include(t => t.SLA)
-            .ToListAsync();
+        _showResolvedTickets = showResolvedTickets;
+        List<TicketEntity> tickets = new List<TicketEntity>();
+
+        if (showResolvedTickets)
+        {
+            tickets = await _context.Tickets
+                .Include(t => t.SLA)
+                .ToListAsync();
+        }
+        else
+        {
+            tickets = await _context.Tickets
+                .Where(x => x.Status != StatusEnum.Resolved)
+                .Include(t => t.SLA)
+                .ToListAsync();
+        }
+
+        _tickets.Clear();
 
         foreach (var ticket in tickets)
         {
+
             _tickets.Add(new QuickViewTicket
             {
                 TicketId = ticket.Id,
@@ -89,7 +120,7 @@ internal class DatabaseService
                 Status = ticket.Status,
                 CreatedTime = ticket.CreatedTime,
                 Severity = ticket.SLA.Severity,
-                TimeSpan = ticket.SLA.TimeSpan,
+                TimeRemaining = ticketService.SetTimeRemaining(ticket.CreatedTime, ticket.SLA.Severity)
             });
         }
 
@@ -97,7 +128,7 @@ internal class DatabaseService
     }
 
 
-    public async Task<FullTicket> GetTicketWithComments(int _id)
+    public static async Task<FullTicket> GetTicketWithComments(int _id)
     {
         var _ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == _id);
         var _client = await _context.Clients.FirstOrDefaultAsync(x => x.Id == _ticket.ClientId);
@@ -118,7 +149,6 @@ internal class DatabaseService
             PhoneNumber = _client.PhoneNumber,
 
             Severity = _SLA.Severity,
-            TimeSpan = _SLA.TimeSpan,
 
             Comments = _comments
         };

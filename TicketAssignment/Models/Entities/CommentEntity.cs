@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketAssignment.Models.Entities;
 
-internal class CommentEntity
+public class CommentEntity
 {
     [Key]
     public int Id { get; set; }

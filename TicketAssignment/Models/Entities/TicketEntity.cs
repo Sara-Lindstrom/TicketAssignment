@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketAssignment.Models.Entities;
 
-internal class TicketEntity
+public class TicketEntity
 {
     [Key]
     public int Id { get; set; }
@@ -38,7 +38,7 @@ internal class TicketEntity
 
 public enum StatusEnum
 {
-    NotStarted,
-    Started,
-    Closed
+    Pending,
+    Ongoing,
+    Resolved
 }

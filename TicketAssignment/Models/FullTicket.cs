@@ -4,7 +4,7 @@ using TicketAssignment.Models.Entities;
 
 namespace TicketAssignment.Models;
 
-class FullTicket
+ public class FullTicket
 {
     //Ticket
     public int TicketId { get; set; }
@@ -21,8 +21,11 @@ class FullTicket
 
     //SLA
     public SeverityEnum Severity { get; set; }
-    public TimeSpan? TimeSpan { get; set; }
+    public string TimeRemaining { get; set; }
+
 
     //Comment
     public ICollection<CommentEntity>? Comments { get; set; }
+
+
 }

@@ -8,87 +8,106 @@
              xmlns:ViewModel="clr-namespace:TicketAssignment.MVVM.ViewModels"
              d:DataContext="{d:DesignInstance Type=ViewModel:TicketSpecificViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Ticket Specifics" Margin="20 25 0 20" FontWeight="DemiBold" FontSize="18"/>
-
-        <Grid Grid.Row="1" Margin="10 20 10 0">
+             d:DesignHeight="500" d:DesignWidth="800">
+    <Grid >
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Ticket Specifics" FontSize="20" FontWeight="DemiBold" Margin="10 20 20 20"/>
 
-            <TextBlock Text="Title: " Grid.Row="0" Grid.Column="0" Padding="5"/>
-            <TextBlock Text="{Binding Title}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Padding="5"/>
+            <Grid Grid.Row="1" Height="340">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Text="Status: " Grid.Row="1" Grid.Column="0" Padding="5"/>
-            <ComboBox ItemsSource="{Binding StatusEnum}" SelectedItem="{Binding Status}" SelectedIndex="{Binding StatusId}" Grid.Row="1" Grid.Column="1" Padding="5"/>
+                <Grid Margin="10 5 10 0" Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Padding="5">
-                <Run Text="Severity: "/>
-                <Run Text="{Binding Severity}"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{Binding TimeSpan}" Grid.Row="1" Grid.Column="3"/>               
-            </TextBlock>
+                    <TextBlock Text="Title: " Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding Title}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" FontWeight="DemiBold"/>
 
+                    <TextBlock Text="Status: " Grid.Row="1" Grid.Column="0" />
+                    <ComboBox ItemsSource="{Binding StatusEnum}" SelectedItem="{Binding Status}" SelectedIndex="{Binding StatusId}" Grid.Row="1" Grid.Column="1" Width="100" HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Client Name: " Grid.Row="2" Grid.Column="0" Padding="5"/>
-            <TextBlock Text="{Binding FirstName}" Grid.Row="2" Grid.Column="1" Padding="5"/>
-            <TextBlock Text="{Binding LastName}" Grid.Row="2" Grid.Column="2" Padding="5"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+                        <Run Text="Severity: "/>
+                        <Run Text="{Binding Severity}"/>
 
-            <TextBlock Text="Client Contact: " Grid.Row="3" Grid.Column="0" Padding="5"/>
-            <TextBlock Text="{Binding Email}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Padding="5"/>
-            <TextBlock Text="{Binding PhoneNumber}" Grid.Row="3" Grid.Column="3" Padding="5"/>
+                        <!--<TextBlock Text="{Binding TimeSpan}" Grid.Row="1" Grid.Column="3"/>-->
+                    </TextBlock>
 
-            <TextBlock Text="Description: " Grid.Row="4" Grid.Column="0" Padding="5"/>
-            <TextBlock Text="{Binding Description}" Grid.Row="4" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="3" Padding="5"/>
-        </Grid>
+                    <TextBlock Text="Client Name: " Grid.Row="2" Grid.Column="0"/>
+                    <TextBlock Text="{Binding FirstName}" Grid.Row="2" Grid.Column="1"/>
+                    <TextBlock Text="{Binding LastName}" Grid.Row="2" Grid.Column="2"/>
 
-        <StackPanel Grid.Row="2" Margin="10 0 10 20">
-            <TextBlock Text="Comments: " Padding="5"/>
-            <ListView ItemsSource="{Binding Comments}" Padding="5">
-                <ListView.ItemTemplate>
-                    <DataTemplate DataType="Entity:CommentEntity">
+                    <TextBlock Text="Client Contact: " Grid.Row="3" Grid.Column="0"/>
+                    <TextBlock Text="{Binding Email}" Grid.Row="3" Grid.Column="1"/>
+                    <TextBlock Text="{Binding PhoneNumber}" Grid.Row="3" Grid.Column="2"/>
 
-                        <StackPanel>
-                            <StackPanel  Orientation="Horizontal">
-                                <TextBlock Text="Comment:"/>
-                                <TextBlock Text="{Binding CreatedTime}"/>
-                            </StackPanel>
+                    <TextBlock Text="Description: " Grid.Row="4" Grid.Column="0"/>
+                    <TextBlock Text="{Binding Description}" Grid.Row="4" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap"/>
+                </Grid>
 
-                            <TextBlock Text="{Binding Comment}"/>
-                        </StackPanel>
+                <Grid Grid.Row="1" Margin="10 5 20 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+                    <TextBlock Grid.Column="0" Text="Add Comment:"/>
+                    <TextBox Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding NewComment}" TextWrapping="Wrap"/>
+                </Grid>
 
-        <Grid Grid.Row="3" Margin="20">
+                <Grid Grid.Row="2" Margin="10 0 20 10" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Comments: " Padding="5"/>
+                    <ListView ItemsSource="{Binding Comments}" Grid.Column="1" Grid.ColumnSpan="2" BorderThickness="0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="Entity:CommentEntity">
+
+                                <StackPanel>
+                                    <TextBlock Text="{Binding CreatedTime}" Margin="0 0 0 3" FontWeight="DemiBold"/>
+                                    <TextBlock Text="{Binding Comment}" Margin="0 0 0 10"  TextWrapping="Wrap"/>
+                                </StackPanel>
+
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>            
+           
+
+        <Grid Grid.Row="2" Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Button Command="{Binding SaveTicketAltercationsCommand}" Grid.Column="0" Content="Save" Margin="0 0 10 0" Padding="5"></Button>
-            <Button Command="{Binding }" Grid.Column="1" Content="Cancel" Margin="10 0 0 0" Padding="5"></Button>
+            <Button Command="{Binding CancelCommand}" Grid.Column="1" Content="Cancel" Margin="10 0 0 0" Padding="5"></Button>
         </Grid>
-    </Grid>
+        </Grid>
 </UserControl>

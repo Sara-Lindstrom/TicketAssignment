@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using TicketAssignment.Models.Entities;
 
 namespace TicketAssignment.Contexts;
 
 internal class DataContext : DbContext 
 {
-    private readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\SaraM\Desktop\repo\DataBase\TicketAssignment\TicketAssignment\Contexts\TicketAssignmentDB.mdf;Integrated Security=True;Connect Timeout=30";
+    private readonly string _connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\SaraM\Desktop\repo\DataBase\TicketAssignment\TicketAssignment\Contexts\TicketDB.mdf;Integrated Security=True;Connect Timeout=30";
 
     #region Constructors;
 
@@ -30,6 +31,11 @@ internal class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<SLAEntity>()
+        .HasData(
+            new SLAEntity { Id = -1, Severity = SeverityEnum.Minor },
+            new SLAEntity { Id = -2, Severity = SeverityEnum.Important },
+            new SLAEntity { Id = -3, Severity = SeverityEnum.Urgent });
         base.OnModelCreating(modelBuilder);
     }
     #endregion

@@ -5,15 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TicketAssignment.Models.Entities;
 
-internal class SLAEntity
+public class SLAEntity
 {
     [Key]
     public int Id { get; set; }
 
     [Required]
     public SeverityEnum Severity { get; set; }
-
-    public TimeSpan? TimeSpan { get; set; }
 
     public ICollection<TicketEntity> Tickets { get; set; } = null!;
 }

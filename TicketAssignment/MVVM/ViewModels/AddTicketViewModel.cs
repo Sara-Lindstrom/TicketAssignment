@@ -11,7 +11,6 @@ namespace TicketAssignment.MVVM.ViewModels;
 
 public partial class AddTicketViewModel : ObservableObject
 {
-    private DatabaseService databaseService = new DatabaseService();
 
     [ObservableProperty]
     private string title = string.Empty;
@@ -40,12 +39,12 @@ public partial class AddTicketViewModel : ObservableObject
     [RelayCommand]
     private async Task AddToDataBase()
     {
-        if(Title != string.Empty || Description != string.Empty || FirstName != string.Empty || LastName != string.Empty || Email != string.Empty || PhoneNumber != string.Empty )
+        if(Title != string.Empty && Description != string.Empty && FirstName != string.Empty && LastName != string.Empty && Email != string.Empty && PhoneNumber != string.Empty )
         {
             FullTicket _newTicket = new FullTicket{
                 Title = Title,
                 Description = Description,
-                Status= StatusEnum.NotStarted,
+                Status= StatusEnum.Pending,
                 CreatedTime= DateTime.Now,
                 FirstName = FirstName,
                 LastName = LastName,
@@ -54,7 +53,7 @@ public partial class AddTicketViewModel : ObservableObject
                 Severity = Severity,
             };
 
-            await databaseService.AddNewTicketAsync(_newTicket);
+            await DatabaseService.AddNewTicketAsync(_newTicket);
 
             Title = string.Empty;
             Description = string.Empty;

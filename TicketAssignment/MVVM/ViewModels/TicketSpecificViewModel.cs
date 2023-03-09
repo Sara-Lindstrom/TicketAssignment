@@ -13,9 +13,9 @@ namespace TicketAssignment.MVVM.ViewModels;
 
 internal partial class TicketSpecificViewModel : ObservableObject
 {
-	DatabaseService _databaseService = new DatabaseService();
 
     private FullTicket _ticket;
+    private int _ticketStatusId;
 
 	[ObservableProperty]
 	private string title = string.Empty;
@@ -50,8 +50,8 @@ internal partial class TicketSpecificViewModel : ObservableObject
     [ObservableProperty]
     private string severity = string.Empty;
 
-    //[ObservableProperty]
-    //private string[] severityEnum;
+    [ObservableProperty]
+    private string newComment = string.Empty;
 
     [ObservableProperty]
     private TimeSpan? timeSpan;
@@ -65,9 +65,28 @@ internal partial class TicketSpecificViewModel : ObservableObject
         if(_ticket.Status != Status)
         {
             _ticket.Status = Status;
-            await _databaseService.UpdateTicketStatusAsync(_ticket);
-
+            await DatabaseService.UpdateTicketStatusAsync(_ticket);
         }
+
+        if (newComment != string.Empty)
+        {
+            var _comment = new CommentEntity
+            {
+                Comment= newComment,
+                CreatedTime= DateTime.Now,
+                TicketId=_ticket.TicketId,
+            };
+
+            await DatabaseService.AddNewCommentAsync(_comment);
+        }
+    }
+
+    [RelayCommand]
+    private void Cancel()
+    {
+        Status = _ticket.Status;
+        StatusId = _ticketStatusId;
+        NewComment = string.Empty;
     }
 
     public TicketSpecificViewModel()
@@ -77,10 +96,9 @@ internal partial class TicketSpecificViewModel : ObservableObject
 
 	public TicketSpecificViewModel(int ticketId)
 	{
-        //severityEnum = Enum.GetNames(typeof(SeverityEnum));
         statusEnum = Enum.GetNames(typeof(StatusEnum));
 
-        var SelectedTicket = Task.Run(async () => await _databaseService.GetTicketWithComments(ticketId));
+        var SelectedTicket = Task.Run(async () => await DatabaseService.GetTicketWithComments(ticketId));
 
         _ticket = new FullTicket
         {
@@ -106,11 +124,6 @@ internal partial class TicketSpecificViewModel : ObservableObject
         phoneNumber = SelectedTicket.Result.PhoneNumber;
         severity = SelectedTicket.Result.Severity.ToString();
 
-        if(SelectedTicket.Result.TimeSpan != null)
-        {
-            timeSpan = SelectedTicket.Result.TimeSpan;
-        }
-
         if(SelectedTicket.Result.Comments.Count != 0)
         {
             comments = SelectedTicket.Result.Comments;
@@ -119,6 +132,7 @@ internal partial class TicketSpecificViewModel : ObservableObject
         if (Enum.TryParse(Status.ToString(), out StatusEnum parsedValue))
         {
             statusId = (int)parsedValue;
+            _ticketStatusId= statusId;
         }
     }
 }
