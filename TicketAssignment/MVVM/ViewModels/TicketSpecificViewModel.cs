@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using TicketAssignment.Models;
 using TicketAssignment.Models.Entities;
 using TicketAssignment.Services;
@@ -66,6 +67,16 @@ internal partial class TicketSpecificViewModel : ObservableObject
         {
             _ticket.Status = Status;
             await DatabaseService.UpdateTicketStatusAsync(_ticket);
+
+            //pop up confirmating
+            string messageBoxText = $"We Have Sent a Hypothetic Mail to The Client";
+            string caption = "Information";
+
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Information;
+            MessageBoxResult result;
+
+            result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.OK);
         }
 
         if (newComment != string.Empty)

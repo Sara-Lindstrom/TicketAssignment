@@ -72,6 +72,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Text="{Binding Title}" TextWrapping="Wrap" FontWeight="DemiBold"/>
@@ -89,6 +90,13 @@
                             <TextBlock Grid.Row="2" Text="{Binding CreatedTime}"/>
                             <TextBlock Grid.Row="3" Text="{Binding TimeRemaining}"/>
 
+                            <Button Content="Remove Ticket" Grid.Row="4">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding Path=DataContext.RemoveTicketCommand, ElementName=Root}" CommandParameter="{Binding .}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
 
                         </Grid>
                     </DataTemplate>

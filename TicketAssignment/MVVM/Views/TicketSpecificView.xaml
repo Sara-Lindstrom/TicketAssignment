@@ -40,8 +40,16 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Title: " Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"/>
-                    <TextBlock Text="{Binding Title}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" FontWeight="DemiBold"/>
+                    <TextBlock Text="Title: " Grid.Row="0" Grid.Column="0" TextWrapping="Wrap"/>                    
+                    <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="{Binding Title}" FontWeight="DemiBold" Grid.Column="0"/>
+                        <TextBlock Text="{Binding CreatedTime}" Grid.Column="1"/>
+                    </Grid>
 
                     <TextBlock Text="Status: " Grid.Row="1" Grid.Column="0" />
                     <ComboBox ItemsSource="{Binding StatusEnum}" SelectedItem="{Binding Status}" SelectedIndex="{Binding StatusId}" Grid.Row="1" Grid.Column="1" Width="100" HorizontalAlignment="Left"/>

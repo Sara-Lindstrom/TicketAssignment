@@ -127,7 +127,6 @@ public static class DatabaseService
         return _tickets;
     }
 
-
     public static async Task<FullTicket> GetTicketWithComments(int _id)
     {
         var _ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == _id);
@@ -154,5 +153,19 @@ public static class DatabaseService
         };
 
         return _returnTicket;
+    }
+
+    public static async Task RemoveTicketAsync(int _id)
+    {
+        var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == _id);
+
+        if (ticket != null)
+        {
+            _context.Remove(ticket);
+            await _context.SaveChangesAsync();
+
+            _tickets.Clear();
+            await GetAllTicketsAsync(_showResolvedTickets);
+        }
     }
 }
